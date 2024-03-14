@@ -16,12 +16,24 @@ class _VMagazzinoPageState extends State<VMagazzino>{
   List<DMag> risultati = []; //lista risultati
   _VMagazzinoPageState({Key? key, required this.risultati});
 
-  void vaiSSMagazzino(int index) {
-    //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SSMagazzino(file: file[index], cliente: cliente, commessa: commessa)),);
+  void VaiImpegna(){
+
   }
+
+  void VaiResi(){
+
+  }
+
+
+  final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
-    const title = '          BANCALI';
+    const title = 'BANCALI';
     return MaterialApp(
       title: title,
       theme: ThemeData(
@@ -34,17 +46,71 @@ class _VMagazzinoPageState extends State<VMagazzino>{
             title: const Text(title),
           ),
           body: Container(
-            height: 1000,
             child: ListView.builder(
                 itemCount: risultati.length,
                 scrollDirection: Axis.vertical,
-                prototypeItem: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: ListTile(
-                    title: Text(risultati.first.getBancale()),
-                  ),
-                ),
                 itemBuilder: (BuildContext context, int index){
+                  return Card(
+                    child:ExpansionTile(
+                      leading: const CircleAvatar(child: Text('A')),
+                      title: Text("codice: ${risultati[index].getCodice()}"),
+                      subtitle: Text("data: ${risultati[index].getData()}"),
+                      children: <Widget>[
+                        ButtonBar(
+                          alignment: MainAxisAlignment.spaceAround,
+                          buttonHeight: 52.0,
+                          buttonMinWidth: 90.0,
+                          children: <Widget>[
+                            TextButton(
+                              style: flatButtonStyle,
+                              onPressed: () {
+                                VaiImpegna();
+                              },
+                              child: const Column(
+                                children: <Widget>[
+                                  Icon(Icons.arrow_downward),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 2.0),
+                                  ),
+                                  Text('Impegna'),
+                                ],
+                              ),
+                            ),
+                            TextButton(
+                              style: flatButtonStyle,
+                              onPressed: () {
+                                VaiResi();
+                              },
+                              child: const Column(
+                                children: <Widget>[
+                                  Icon(Icons.arrow_upward),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 2.0),
+                                  ),
+                                  Text('Reso'),
+                                ],
+                              ),
+                            ),
+                            TextButton(
+                              style: flatButtonStyle,
+                              onPressed: () {
+                              },
+                              child: const Column(
+                                children: <Widget>[
+                                  Icon(Icons.swap_vert),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 2.0),
+                                  ),
+                                  Text('Elimina'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                    );
+                  /*
                   return Card(
                     elevation: 10.0,
                     margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
@@ -60,7 +126,7 @@ class _VMagazzinoPageState extends State<VMagazzino>{
                         trailing: const Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 60),
                       ),
                     ),
-                  );
+                  );*/
                 }
             ),
           )

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'DMag.dart';
 import 'VMagazzino.dart';
-import 'package:excel/excel.dart';
 import 'snakBar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -59,14 +58,24 @@ class _TrovaState extends State<Trova> {
   Future<List<DMag>> getData() async{
     List<DMag> ris = [];
     var url = "http://188.12.130.133:1717/Trova.php";
-    http.Response response = await http.get(Uri.parse(url));
-    print(jsonDecode(response.body));
-    Map<String, dynamic> data = jsonDecode(response.body);
-    print(data['codicePM']);
-    for(int i =0; data.length>i;++i){
-      ris.add(DMag(int.parse(data['codicePM']), data['nomeBM'],int.parse(data['quantitaM']), data['data_inserimentoM']));
+    http.Response response = await http.post(
+      Uri.parse(url),
+      body: jsonEncode(<String, String>{
+        'codice': input[0].text,
+      }),
+    );
+    var responseD = jsonDecode(response.body);
+    if(responseD==false){
+      return ris;
+    }else {
+      Map<String, dynamic> data = responseD;
+      print(data);
+      for(int i =0; i<data.length;++i) {
+        ris.add(DMag(int.parse(data['codicePM']), data['nomeBM'],
+            int.parse(data['quantitaM']), data['data_inserimentoM']));
+      }
+      return ris;
     }
-    return ris;
   }
 
   //esegue la funzione cerca e capisce se ha trovato risultati o no
