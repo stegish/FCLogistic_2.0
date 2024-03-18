@@ -1,35 +1,36 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-//import 'package:untitled/SCMagazzino.dart';
+import 'Impegna.dart';
 import 'DMag.dart';
+import 'package:http/http.dart' as http;
 
 //visualizza i banccali trovati con il codice cercato tramite una ListView
 class VMagazzino extends StatefulWidget {
-  List<DMag> listaRisultati = []; //numero risultati dropdown
+List<DMag> listaRisultati = []; //numero risultati dropdown
+VMagazzino({Key? key, required this.listaRisultati}) :super(key: key);
 
-  VMagazzino({Key? key, required this.listaRisultati}) :super(key: key);
-
-  @override
-  State<VMagazzino> createState() => _VMagazzinoPageState(risultati: listaRisultati);
+@override  State<VMagazzino> createState() => _VMagazzinoPageState(risultati: listaRisultati);
 }
 class _VMagazzinoPageState extends State<VMagazzino>{
   List<int> dropDownValue = []; //numero risultati dropdown
   List<DMag> risultati = []; //lista risultati
   _VMagazzinoPageState({Key? key, required this.risultati});
 
-  void VaiImpegna(){
-
+  void VaiImpegna(int index){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Impegna(riga: risultati[index])),);
   }
 
-  void VaiResi(){
+  void VaiResi(int index){
 
   }
-
 
   final ButtonStyle flatButtonStyle = TextButton.styleFrom(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(4.0)),
     ),
   );
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +53,11 @@ class _VMagazzinoPageState extends State<VMagazzino>{
                 itemBuilder: (BuildContext context, int index){
                   return Card(
                     child:ExpansionTile(
-                      leading: const CircleAvatar(child: Text('A')),
+                      leading: CircleAvatar(child: Text("${risultati[index].getnPezzi()}")),
                       title: Text("codice: ${risultati[index].getCodice()}"),
                       subtitle: Text("data: ${risultati[index].getData()}"),
                       children: <Widget>[
+                        Text('bancale: ${risultati[index].getBancale()}'),
                         ButtonBar(
                           alignment: MainAxisAlignment.spaceAround,
                           buttonHeight: 52.0,
@@ -64,7 +66,7 @@ class _VMagazzinoPageState extends State<VMagazzino>{
                             TextButton(
                               style: flatButtonStyle,
                               onPressed: () {
-                                VaiImpegna();
+                                VaiImpegna(index);
                               },
                               child: const Column(
                                 children: <Widget>[
@@ -79,7 +81,7 @@ class _VMagazzinoPageState extends State<VMagazzino>{
                             TextButton(
                               style: flatButtonStyle,
                               onPressed: () {
-                                VaiResi();
+                                VaiResi(index);
                               },
                               child: const Column(
                                 children: <Widget>[
