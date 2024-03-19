@@ -7,29 +7,29 @@ import 'package:input_quantity/input_quantity.dart';
 
 
 
-class Impegna extends StatefulWidget {
+class Resi extends StatefulWidget {
 
   final DMag riga;
 
-  Impegna({Key? key, required this.riga}): super(key: key);
+  Resi({Key? key, required this.riga}): super(key: key);
 
   @override
-  State<Impegna> createState() => _ImpegnaState(rigap: riga);
+  State<Resi> createState() => _ResiState(rigap: riga);
 }
 
-class _ImpegnaState extends State<Impegna> {
+class _ResiState extends State<Resi> {
   final DMag rigap; //lista con i vari risultati trovati
   static final GlobalKey<ScaffoldState> _ImpegnaS = GlobalKey<ScaffoldState>(); //per la comparsa dei pop-up
   final input = [TextEditingController()]; //variabile per l'input
   final _ImpegnaF = GlobalKey<FormState>(); //key del form1
   int quantitaI=0;
 
-  _ImpegnaState({required this.rigap});
+  _ResiState({required this.rigap});
 
 
   //cerca nel database il codice inserito
   void sendData(int quantitaI) async{
-    var url = "http://188.12.130.133:1717/Impegna.php";
+    var url = "http://188.12.130.133:1717/Resi.php";
     print(rigap.getnPezzi());
     http.Response response = await http.post(
       Uri.parse(url),
@@ -39,7 +39,7 @@ class _ImpegnaState extends State<Impegna> {
         'quantitaI': quantitaI.toString(),
         'bancale' : rigap.getBancale().toString(),
         'data' : DateTime.now().toString(),
-        'commessa' : input[0].text
+        'azienda' : input[0].text
       },
     );
     var responseD = jsonDecode(response.body);
@@ -95,11 +95,11 @@ class _ImpegnaState extends State<Impegna> {
               TextFormField(
                 keyboardType: TextInputType.text,
                 controller: input[0],
-                validator: (val) => (val!.isEmpty||val.contains('.')||val.contains(',')||val.contains('-')||val.contains(' ')) ? "inserisci la commessa" : null,
+                validator: (val) => (val!.isEmpty||val.contains('.')||val.contains(',')||val.contains('-')||val.contains(' ')) ? "inserisci l'azienda a cui fare il reso" : null,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.numbers),
-                  hintText: 'SJ*****',
-                  labelText: 'commessa *',
+                  hintText: 'Spa**',
+                  labelText: 'azienda *',
                 ),
               ),
             ],

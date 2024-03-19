@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'Impegna.dart';
 import 'DMag.dart';
 import 'package:http/http.dart' as http;
+
+import 'Resi.dart';
 
 //visualizza i banccali trovati con il codice cercato tramite una ListView
 class VMagazzino extends StatefulWidget {
@@ -22,7 +22,7 @@ class _VMagazzinoPageState extends State<VMagazzino>{
   }
 
   void VaiResi(int index){
-
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Resi(riga: risultati[index])),);
   }
 
   final ButtonStyle flatButtonStyle = TextButton.styleFrom(
