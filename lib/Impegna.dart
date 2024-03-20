@@ -38,7 +38,7 @@ class _ImpegnaState extends State<Impegna> {
         'quantita' : rigap.getnPezzi().toString(),
         'quantitaI': quantitaI.toString(),
         'bancale' : rigap.getBancale().toString(),
-        'data' : DateTime.now().toString(),
+        'data' : DateTime.now().year.toString() +"-"+DateTime.now().month.toString() +"-"+ DateTime.now().day.toString(),
         'commessa' : input[0].text
       },
     );

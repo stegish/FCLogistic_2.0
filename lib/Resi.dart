@@ -38,7 +38,7 @@ class _ResiState extends State<Resi> {
         'quantita' : rigap.getnPezzi().toString(),
         'quantitaI': quantitaI.toString(),
         'bancale' : rigap.getBancale().toString(),
-        'data' : DateTime.now().toString(),
+        'data' : DateTime.now().year.toString() +"-"+DateTime.now().month.toString() +"-"+ DateTime.now().day.toString(),
         'azienda' : input[0].text
       },
     );
