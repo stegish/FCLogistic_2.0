@@ -13,25 +13,27 @@ class _CaricaState extends State<Carica> {
 
   static final GlobalKey<ScaffoldState> _Carica = GlobalKey<ScaffoldState>(); //key per i pop-up
   final input = [TextEditingController()]; //bancale
-  List<String> risultato = [];
 
-  void RealTimeSearch() async{
+  Future<List<String>> RealTimeSearch(String cod) async{
+    List<String> risultato = [];
     var url = "http://188.12.130.133:1717/Trova.php";
     http.Response response = await http.post(
       Uri.parse(url),
       body: {
-        'codice': input[0].text,
+        'codice': cod,
       },
     );
     var responseD = jsonDecode(response.body);
     print(responseD);
-    if(responseD==true){
+    if(responseD['success']==true){
       List<dynamic> data = responseD['data'];
       print(data);
       for(int i =0; i<data.length;++i) {
         risultato.add(data[i]['nomeBM']);
+        print(data[i]['nomeBM']);
       }
     }
+    return risultato;
   }
 
   VaiCVMagazzino(){
@@ -55,19 +57,13 @@ class _CaricaState extends State<Carica> {
             Padding(padding: EdgeInsets.all(30.0),
               child : Autocomplete<String>(
                 optionsBuilder: (TextEditingValue textEditingValue) async {
-                  _searchingWithQuery = textEditingValue.text;
-                  final Iterable<String> options =
-                  await _FakeAPI.search(_searchingWithQuery!);
-                  if (_searchingWithQuery != textEditingValue.text) {
-                    return _lastOptions;
-                  }
-                  _lastOptions = options;
-                  return options;
-                },
+                  List<String> ris = await RealTimeSearch(textEditingValue.text);
+                  return ris;
+                  },
                 onSelected: (String selection) {
                   debugPrint('You just selected $selection');
                 },
-              );
+              ),
             ),
           ],
         ),

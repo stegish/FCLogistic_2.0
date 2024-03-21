@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Impegna.dart';
 import 'DMag.dart';
-import 'package:http/http.dart' as http;
-
 import 'Resi.dart';
 
 //visualizza i banccali trovati con il codice cercato tramite una ListView
@@ -111,24 +109,7 @@ class _VMagazzinoPageState extends State<VMagazzino>{
                         ),
                       ],
                     )
-                    );
-                  /*
-                  return Card(
-                    elevation: 10.0,
-                    margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
-                    child: Container(
-                      decoration: const BoxDecoration(color: Colors.red),
-                      child : ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-                        title:Text(
-                          "codice: ${risultati[index].getCodice()}\nagiunto il: ${risultati[index].getData()}\npezzi: ${risultati[index].getPezzi()}\nbancale: ${risultati[index].getBancale()}",
-                          style: const TextStyle(fontWeight: FontWeight.bold),),
-                        onTap: () =>[
-                          vaiSSMagazzino(index),],
-                        trailing: const Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 60),
-                      ),
-                    ),
-                  );*/
+                  );
                 }
             ),
           )
