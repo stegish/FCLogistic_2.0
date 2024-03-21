@@ -27,14 +27,14 @@ class BottomNavBar extends StatefulWidget{
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.upload_circle_fill),
+        icon: const Icon(CupertinoIcons.download_circle_fill),
         title: ("Trova Pezzo"),
         activeColorPrimary: CupertinoColors.systemRed,
         inactiveColorPrimary: CupertinoColors.black,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.trash_circle_fill),
-        title: ("Elimina Pezzi"),
+        icon: const Icon(CupertinoIcons.upload_circle_fill),
+        title: ("Carica pezzi"),
         activeColorPrimary: CupertinoColors.systemRed,
         inactiveColorPrimary: CupertinoColors.black,
       ),
