@@ -15,13 +15,13 @@ class _CaricaState extends State<Carica> {
   final input = [TextEditingController(),  TextEditingController()]; //bancale
   String bancale="";
 
-  Future<List<String>> RealTimeSearch(String cod) async{
+  Future<List<String>> RealTimeSearch(String banc) async{
     List<String> risultato = [];
     var url = "http://188.12.130.133:1717/TrovaBancale.php";
     http.Response response = await http.post(
       Uri.parse(url),
       body: {
-        'bancale': cod,
+        'bancale': banc,
       },
     );
     var responseD = jsonDecode(response.body);
@@ -30,31 +30,44 @@ class _CaricaState extends State<Carica> {
       List<dynamic> data = responseD['data'];
       print(data);
       for(int i =0; i<data.length;++i) {
-        risultato.add(data[i]['nomeBM']);
-        print(data[i]['nomeBM']);
+        risultato.add(data[i]['nomeB']);
+        print(data[i]['nomeB']);
       }
     }
     return risultato;
   }
 
   void SendData() async{
-    var url = "http://188.12.130.133:1717/Carica.php";
-    http.Response response = await http.post(
-      Uri.parse(url),
-      body: {
-        'codice': input[0].text,
-        'bancale': bancale,
-        'quantita': input[1].text,
-        'data': DateTime.now().year.toString() +"-"+DateTime.now().month.toString() +"-"+ DateTime.now().day.toString(),
-        'descrizione': '',
-      },
-    );
-    var responseD = jsonDecode(response.body);
-    print(responseD);
-    if(responseD['success']==true){
-      print("successo");
-    }else{
+    if(bancale!="") {
+      var url = "http://188.12.130.133:1717/Carica.php";
+      http.Response response = await http.post(
+        Uri.parse(url),
+        body: {
+          'codice': input[0].text,
+          'bancale': bancale,
+          'quantita': input[1].text,
+          'data': "${DateTime
+              .now()
+              .year}-${DateTime
+              .now()
+              .month}-${DateTime
+              .now()
+              .day}",
+          'descrizione': '',
+        },
+      );
+      var responseD = jsonDecode(response.body);
       print(responseD);
+      if (responseD['success'] == true) {
+        print("successo");
+        //TODO: aggiungere snackbar per successo
+      } else {
+        //TODO: aggiungere snackbar per l'errore
+        print(responseD);
+      }
+    }else{
+      print("sbagliato");
+          //TODO: aggiungere snackbar per l'errore
     }
   }
 
