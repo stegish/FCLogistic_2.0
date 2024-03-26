@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'Trova.dart';
 import 'Carica.dart';
+import 'MagazzinoCompleto.dart';
 
 class BottomNavBar extends StatefulWidget{
   const BottomNavBar({super.key});
@@ -20,6 +21,7 @@ class BottomNavBar extends StatefulWidget{
     return [
       const Trova(),
       const Carica(),
+      MagazzinoCompleto(),
     ];
   }
 
@@ -35,6 +37,12 @@ class BottomNavBar extends StatefulWidget{
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.upload_circle_fill),
         title: ("Carica pezzi"),
+        activeColorPrimary: CupertinoColors.systemRed,
+        inactiveColorPrimary: CupertinoColors.black,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(CupertinoIcons.list_bullet),
+        title: ("visualizza"),
         activeColorPrimary: CupertinoColors.systemRed,
         inactiveColorPrimary: CupertinoColors.black,
       ),
