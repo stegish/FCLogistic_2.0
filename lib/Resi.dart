@@ -19,9 +19,9 @@ class Resi extends StatefulWidget {
 
 class _ResiState extends State<Resi> {
   final DMag rigap; //lista con i vari risultati trovati
-  static final GlobalKey<ScaffoldState> _ImpegnaS = GlobalKey<ScaffoldState>(); //per la comparsa dei pop-up
+  static final GlobalKey<ScaffoldState> _ResiS = GlobalKey<ScaffoldState>(); //per la comparsa dei pop-up
   final input = [TextEditingController()]; //variabile per l'input
-  final _ImpegnaF = GlobalKey<FormState>(); //key del form1
+  final _ResiF = GlobalKey<FormState>(); //key del form1
   int quantitaI=0;
 
   _ResiState({required this.rigap});
@@ -45,13 +45,13 @@ class _ResiState extends State<Resi> {
     var responseD = jsonDecode(response.body);
     print(responseD);
     Navigator.pop(context);
-    Navigator.pop(context);
+    //TODO: eccezzioni
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _ImpegnaS,
+      key: _ResiS,
       appBar: AppBar(
         title: const Center(
           child: Text("SCARICA",
@@ -60,7 +60,7 @@ class _ResiState extends State<Resi> {
         ),
       ),
       body: Form(
-        key: _ImpegnaF,
+        key: _ResiF,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +95,7 @@ class _ResiState extends State<Resi> {
               TextFormField(
                 keyboardType: TextInputType.text,
                 controller: input[0],
-                validator: (val) => (val!.isEmpty||val.contains('.')||val.contains(',')||val.contains('-')||val.contains(' ')) ? "inserisci l'azienda a cui fare il reso" : null,
+                validator: (val) => (val!.isEmpty||val.contains('.')||val.contains(',')||val.contains('-')) ? "inserisci l'azienda a cui fare il reso" : null,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.numbers),
                   hintText: 'Spa**',
@@ -109,7 +109,7 @@ class _ResiState extends State<Resi> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
         onPressed: (){
-          if (_ImpegnaF.currentState!.validate()) {
+          if (_ResiF.currentState!.validate()) {
             sendData(quantitaI);
           }
         },

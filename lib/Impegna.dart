@@ -45,7 +45,7 @@ class _ImpegnaState extends State<Impegna> {
     var responseD = jsonDecode(response.body);
     print(responseD);
     Navigator.pop(context);
-    Navigator.pop(context);
+    //TODO: eccezzioni
   }
 
   @override
@@ -95,7 +95,7 @@ class _ImpegnaState extends State<Impegna> {
               TextFormField(
                 keyboardType: TextInputType.text,
                 controller: input[0],
-                validator: (val) => (val!.isEmpty||val.contains('.')||val.contains(',')||val.contains('-')||val.contains(' ')) ? "inserisci la commessa" : null,
+                validator: (val) => (val!.isEmpty||val.contains('.')||val.contains(',')||val.contains('-')) ? "inserisci la commessa" : null,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.numbers),
                   hintText: 'SJ*****',
