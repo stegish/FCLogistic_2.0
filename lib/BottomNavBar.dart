@@ -77,7 +77,7 @@ class BottomNavBar extends StatefulWidget{
             curve: Curves.ease,
             duration: Duration(milliseconds: 200),
           ),
-          navBarStyle: NavBarStyle.style1, // Choose the nav bar style with this property.
+          navBarStyle: NavBarStyle.style16, // Choose the nav bar style with this property.
         )
     );
   }

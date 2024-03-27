@@ -46,7 +46,7 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
         },
       );
       var responseD = jsonDecode(response.body);
-    print(responseD);
+      print(responseD);
       if (true == responseD['success']) {
         setState(() {
           List<dynamic> data = responseD['data'];
@@ -79,21 +79,21 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
       _error = "";
     });
     //try {
-      final response = await http.post(Uri.parse('http://188.12.130.133:1717/magazzinoCompleto.php'));
-      var responseD = jsonDecode(response.body);
-      if (true == responseD['success']) {
-        setState(() {
-          List<dynamic> data = responseD['data'];
-          print(data);
-          for(int i =0; i<data.length;++i) {
-            print(data[i]["nomeB"]);
-            getContenutoBancale(data[i]["nomeB"], data[i]["data_creazioneB"]);
-          }
-          _isLoading = false;
-        });
-      } else {
-        throw Exception('Failed to load data');
-      }
+    final response = await http.post(Uri.parse('http://188.12.130.133:1717/magazzinoCompleto.php'));
+    var responseD = jsonDecode(response.body);
+    if (true == responseD['success']) {
+      setState(() {
+        List<dynamic> data = responseD['data'];
+        print(data);
+        for(int i =0; i<data.length;++i) {
+          print(data[i]["nomeB"]);
+          getContenutoBancale(data[i]["nomeB"], data[i]["data_creazioneB"]);
+        }
+        _isLoading = false;
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
     /*} catch (e) {
       setState(() {
         _isLoading = false;
@@ -153,12 +153,12 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
                             child:ExpansionTile(
                               onExpansionChanged: (bool change) {
                                 setState(() {
-                                if(change){
-                                  expanded ++;
-                                  print(expanded);
-                                }else{
-                                  expanded --;
-                                }
+                                  if(change){
+                                    expanded ++;
+                                    print(expanded);
+                                  }else{
+                                    expanded --;
+                                  }
                                 });
                               },
                               leading: CircleAvatar(child: Text("${_list[i].getnPezziC()[j]}")),

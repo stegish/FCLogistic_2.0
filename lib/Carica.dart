@@ -12,7 +12,7 @@ class Carica extends StatefulWidget {
 class _CaricaState extends State<Carica> {
 
   static final GlobalKey<ScaffoldState> _Carica = GlobalKey<ScaffoldState>(); //key per i pop-up
-  final input = [TextEditingController(),  TextEditingController()]; //bancale
+  final input = [TextEditingController(),  TextEditingController(),  TextEditingController()]; //bancale
   String bancale="";
 
   Future<List<String>> RealTimeSearch(String banc) async{
@@ -91,13 +91,37 @@ class _CaricaState extends State<Carica> {
           children: <Widget>[
             Padding(padding: EdgeInsets.all(30.0),
               child : Autocomplete<String>(
-                optionsBuilder: (TextEditingValue textEditingValue) async {
+                optionsBuilder: (textEditingValue) async {
                   List<String> ris = await RealTimeSearch(textEditingValue.text);
                   bancale=textEditingValue.text;
                   return ris;
                   },
-                onSelected: (String selection) {
+                fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted){
+                    return TextField(
+                      controller: textEditingController,
+                      focusNode: focusNode,
+                      onEditingComplete: onFieldSubmitted,
+                      decoration: const InputDecoration(
+                        hintText: 'inserisci nome bancale',
+                        labelText: 'bancale *',
+                      ),
+                    );
                 },
+                optionsViewBuilder: ((context, onSelected, ris){
+                  return Material(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical:20),
+                      itemCount: ris.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(ris.elementAt(index)),
+                        );
+                      },
+                    )
+                  );
+                }),
+                onSelected: (ris) => debugPrint(ris),
+                displayStringForOption: ((ris)=> ris),
               ),
             ),
             Padding(padding: EdgeInsets.all(30.0),
