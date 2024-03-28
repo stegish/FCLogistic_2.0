@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -12,8 +13,10 @@ class Carica extends StatefulWidget {
 class _CaricaState extends State<Carica> {
 
   static final GlobalKey<ScaffoldState> _Carica = GlobalKey<ScaffoldState>(); //key per i pop-up
-  final input = [TextEditingController(),  TextEditingController(),  TextEditingController()]; //bancale
+  final input = [TextEditingController(),  TextEditingController(),  TextEditingController(), TextEditingController()]; //bancale
   String bancale="";
+  bool nuovoBancale=false;
+  String colonna="";
 
   Future<List<String>> RealTimeSearch(String banc) async{
     List<String> risultato = [];
@@ -31,7 +34,7 @@ class _CaricaState extends State<Carica> {
       print(data);
       for(int i =0; i<data.length;++i) {
         risultato.add(data[i]['nomeB']);
-        print(data[i]['nomeB']);
+        colonna=data[0]['colonnaB'];
       }
     }
     return risultato;
@@ -54,6 +57,7 @@ class _CaricaState extends State<Carica> {
               .now()
               .day}",
           'descrizione': '',
+          'colonna': input[3].text
         },
       );
       var responseD = jsonDecode(response.body);
@@ -90,38 +94,67 @@ class _CaricaState extends State<Carica> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(padding: EdgeInsets.all(30.0),
-              child : Autocomplete<String>(
-                optionsBuilder: (textEditingValue) async {
-                  List<String> ris = await RealTimeSearch(textEditingValue.text);
-                  bancale=textEditingValue.text;
-                  return ris;
-                  },
-                fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted){
-                    return TextField(
-                      controller: textEditingController,
-                      focusNode: focusNode,
-                      onEditingComplete: onFieldSubmitted,
-                      decoration: const InputDecoration(
-                        hintText: 'inserisci nome bancale',
-                        labelText: 'bancale *',
-                      ),
-                    );
-                },
-                optionsViewBuilder: ((context, onSelected, ris){
-                  return Material(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(vertical:20),
-                      itemCount: ris.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          title: Text(ris.elementAt(index)),
-                        );
+              child : Row(
+                children: [
+                  Expanded(
+                    child: Autocomplete<String>(
+                      optionsBuilder: (textEditingValue) async {
+                        List<String> ris = await RealTimeSearch(textEditingValue.text);
+                        bancale=textEditingValue.text;
+                        if(ris[0]==textEditingValue.text){
+                          setState(() { nuovoBancale=false; });
+                          input[3].text=colonna;
+                        }else{
+                          setState(() { nuovoBancale=true; });
+                        }
+                        return ris;
+                        },
+                      fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted){
+                          return TextField(
+                            controller: textEditingController,
+                            focusNode: focusNode,
+                            onEditingComplete: onFieldSubmitted,
+                            decoration: const InputDecoration(
+                              hintText: 'inserisci nome bancale',
+                              labelText: 'bancale *',
+                            ),
+                          );
                       },
-                    )
-                  );
-                }),
-                onSelected: (ris) => debugPrint(ris),
-                displayStringForOption: ((ris)=> ris),
+                      optionsViewBuilder: ((context, onSelected, ris){
+                        return Material(
+                          child: ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical:20),
+                            itemCount: ris.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                title: Text(ris.elementAt(index)),
+                              );
+                            },
+                          )
+                        );
+                      }),
+                      onSelected: (ris) => debugPrint(ris),
+                      displayStringForOption: ((ris)=> ris),
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                        enabled: nuovoBancale,
+                        keyboardType: TextInputType.number,
+                        controller: input[3],
+                        decoration: const InputDecoration(
+                          hintText: 'colonna bancale',
+                          labelText: 'colonna *',
+                        ),
+                        validator: (val){
+                          if(val!.isEmpty || val.length>8){
+                            return "inserisci quantita";
+                          }else{
+                            return null;
+                          }}
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(padding: EdgeInsets.all(30.0),

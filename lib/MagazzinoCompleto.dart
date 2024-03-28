@@ -137,95 +137,106 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
         itemCount: _list.length + (_isLoading ? 1 : 0),
         itemBuilder: (BuildContext context, int i) {
           if (i == _list.length) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else {
-            return ExpansionTile(
-              leading: CircleAvatar(child: Text("${_list[i].sommaCodici()}")),
-              title: Text("BANCALE: ${_list[i].getBancale()}"),
-              subtitle: Text("data creazione: ${_list[i].getData()}"),
-              children: <Widget>[
-                Container(
-                  height: (83*_list[i].sommaCodici().toDouble()+expanded*83),
-                  child: ListView.builder(
-                      itemCount: _list[i].sommaCodici(),
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int j){
-                        return Card(
-                            child:ExpansionTile(
-                              onExpansionChanged: (bool change) {
-                                setState(() {
-                                  if(change){
-                                    expanded ++;
-                                    print(expanded);
-                                  }else{
-                                    expanded --;
-                                  }
-                                });
-                              },
-                              leading: CircleAvatar(child: Text("${_list[i].getnPezziC()[j]}")),
-                              title: Text("codice: ${_list[i].getCodiciC()[j]}"),
-                              subtitle: Text("data: ${_list[i].getDateC()[j]}"),
-                              children: <Widget>[
-                                ButtonBar(
-                                  alignment: MainAxisAlignment.spaceAround,
-                                  buttonHeight: 52.0,
-                                  buttonMinWidth: 90.0,
-                                  children: <Widget>[
-                                    TextButton(
-                                      style: flatButtonStyle,
-                                      onPressed: () {
-                                        VaiImpegna(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
-                                            _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
-                                      },
-                                      child: const Column(
-                                        children: <Widget>[
-                                          Icon(Icons.arrow_downward),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 2.0),
-                                          ),
-                                          Text('Impegna'),
-                                        ],
+            return Container(
+              child: ExpansionTile(
+                leading: CircleAvatar(child: Text("${_list[i].sommaCodici()}")),
+                title: Text("BANCALE: ${_list[i].getBancale()}"),
+                subtitle: Text("data creazione: ${_list[i].getData()}"),
+                children: <Widget>[
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: _list[i].sommaCodici(),
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (BuildContext context, int j){
+                          return Expanded(
+                            child: Card(
+                                  child: ExpansionTile(
+                                    onExpansionChanged: (bool change) {
+                                      setState(() {
+                                        if(change){
+                                          expanded ++;
+                                          print(expanded);
+                                        }else{
+                                          expanded --;
+                                        }
+                                      });
+                                    },
+                                    leading: CircleAvatar(child: Text("${_list[i].getnPezziC()[j]}")),
+                                    title: Text("codice: ${_list[i].getCodiciC()[j]}"),
+                                    subtitle: Text("data: ${_list[i].getDateC()[j]}"),
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: ButtonBar(
+                                          alignment: MainAxisAlignment.spaceAround,
+                                          buttonHeight: 52.0,
+                                          buttonMinWidth: 90.0,
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: TextButton(
+                                                style: flatButtonStyle,
+                                                onPressed: () {
+                                                  VaiImpegna(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
+                                                      _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
+                                                },
+                                                child: const Column(
+                                                  children: <Widget>[
+                                                    Icon(Icons.arrow_downward),
+                                                    Padding(
+                                                      padding: EdgeInsets.symmetric(vertical: 2.0),
+                                                    ),
+                                                    Text('Impegna'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: TextButton(
+                                                style: flatButtonStyle,
+                                                onPressed: () {
+                                                  VaiResi(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
+                                                      _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
+                                                },
+                                                child: const Column(
+                                                  children: <Widget>[
+                                                    Icon(Icons.arrow_upward),
+                                                    Padding(
+                                                      padding: EdgeInsets.symmetric(vertical: 2.0),
+                                                    ),
+                                                    Text('Reso'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: TextButton(
+                                                style: flatButtonStyle,
+                                                onPressed: () {
+                                                },
+                                                child: const Column(
+                                                  children: <Widget>[
+                                                    Icon(Icons.swap_vert),
+                                                    Padding(
+                                                      padding: EdgeInsets.symmetric(vertical: 2.0),
+                                                    ),
+                                                    Text('Elimina'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    TextButton(
-                                      style: flatButtonStyle,
-                                      onPressed: () {
-                                        VaiResi(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
-                                            _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
-                                      },
-                                      child: const Column(
-                                        children: <Widget>[
-                                          Icon(Icons.arrow_upward),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 2.0),
-                                          ),
-                                          Text('Reso'),
-                                        ],
-                                      ),
-                                    ),
-                                    TextButton(
-                                      style: flatButtonStyle,
-                                      onPressed: () {
-                                      },
-                                      child: const Column(
-                                        children: <Widget>[
-                                          Icon(Icons.swap_vert),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 2.0),
-                                          ),
-                                          Text('Elimina'),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                        );
-                      }
+                                    ],
+                                  ),
+                            ),
+                          );
+                        }
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           }
         },
