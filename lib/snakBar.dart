@@ -5,10 +5,9 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 //permette la creazione dei pop-up con la quale
 //si comuna il successo o un problema in una certa operazione
 class GlobalValues {
-  static showSnackbar(GlobalKey key, String titolo,String msg ,String type) {
-    BuildContext c= key.currentState!.context;
+  static showSnackbar(ScaffoldMessengerState st, String titolo,String msg ,String type) {
     if(type=="successo") {
-      ScaffoldMessenger.of(c).showSnackBar(SnackBar(
+      st.showSnackBar(SnackBar(
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
@@ -20,7 +19,7 @@ class GlobalValues {
       ),
       );
     }else if(type=="fallito"){
-      ScaffoldMessenger.of(c).showSnackBar(SnackBar(
+      st.showSnackBar(SnackBar(
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
@@ -32,7 +31,7 @@ class GlobalValues {
       ),
       );
     }else{
-      ScaffoldMessenger.of(c).showSnackBar(SnackBar(
+      st.showSnackBar(SnackBar(
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,

@@ -81,7 +81,7 @@ class _CaricaState extends State<Carica> {
       key: _Carica,
       appBar: AppBar(
         title: const Center(
-          child: Text("CARICA     ",
+          child: Text("CARICA",
             style: TextStyle(fontWeight: FontWeight.bold),),
         ),
       ),

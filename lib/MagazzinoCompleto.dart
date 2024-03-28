@@ -78,7 +78,7 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
       _isLoading = true;
       _error = "";
     });
-    //try {
+    try {
     final response = await http.post(Uri.parse('http://188.12.130.133:1717/magazzinoCompleto.php'));
     var responseD = jsonDecode(response.body);
     if (true == responseD['success']) {
@@ -94,12 +94,12 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
     } else {
       throw Exception('Failed to load data');
     }
-    /*} catch (e) {
+    } catch (e) {
       setState(() {
         _isLoading = false;
         _error = e.toString();
       });
-    }*/
+    }
   }
 
   void VaiImpegna(DMag d){
@@ -127,10 +127,11 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MAGAZZINO'),
+        title: const Center(child: Text('MAGAZZINO',
+            style: TextStyle(fontWeight: FontWeight.bold))),
       ),
       body: _error != ""
-          ? Center(child: Text('Error: $_error'))
+          ? Center(child: Text('Error: $_error'),)
           : ListView.builder(
         controller: _scrollController,
         itemCount: _list.length + (_isLoading ? 1 : 0),

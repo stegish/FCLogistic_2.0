@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'DMag.dart';
 import 'VMagazzino.dart';
 import 'snakBar.dart';
+import 'BottomNavBar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -11,13 +12,13 @@ import 'dart:convert';
 class Trova extends StatefulWidget {
   const Trova({super.key});
 
+
   @override
   State<Trova> createState() => _TrovaState();
 }
 
 class _TrovaState extends State<Trova> {
   List<DMag> risultato = []; //lista con i vari risultati trovati
-  static final GlobalKey<ScaffoldState> _TrovaS = GlobalKey<ScaffoldState>(); //per la comparsa dei pop-up
   final input = [TextEditingController(), TextEditingController()]; //variabile per l'input
   bool isChecked = false; //controlla se è un reso o no
   final _TrovaF = GlobalKey<FormState>(); //key del form1
@@ -37,7 +38,7 @@ class _TrovaState extends State<Trova> {
       },
     );
     var responseD = jsonDecode(response.body);
-    if(responseD==false){
+    if(responseD['success']==false){
       return ris;
     }else {
       List<dynamic> data = responseD['data'];
@@ -55,8 +56,7 @@ class _TrovaState extends State<Trova> {
     risultato.clear();
     risultato = await getData();
     if (risultato.isEmpty) {
-      GlobalValues.showSnackbar(
-          _TrovaS , "ATTENZIONE", "codice non trovato", "fallito");
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context),"ATTENZIONE", "codice non trovato", "fallito");
     } else {
       VaiVMagazzino();
     }
@@ -65,7 +65,6 @@ class _TrovaState extends State<Trova> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _TrovaS,
         appBar: AppBar(
           title: const Center(
             child: Text("SCARICA",

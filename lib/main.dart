@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
           bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Arial'),
         ),
       ),
-      home: const BottomNavBar(),
+      home: SafeArea(child: const BottomNavBar()),
     );
   }
 }
