@@ -145,96 +145,81 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
                 title: Text("BANCALE: ${_list[i].getBancale()}"),
                 subtitle: Text("data creazione: ${_list[i].getData()}"),
                 children: <Widget>[
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: _list[i].sommaCodici(),
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (BuildContext context, int j){
-                          return Expanded(
-                            child: Card(
-                                  child: ExpansionTile(
-                                    onExpansionChanged: (bool change) {
-                                      setState(() {
-                                        if(change){
-                                          expanded ++;
-                                          print(expanded);
-                                        }else{
-                                          expanded --;
-                                        }
-                                      });
-                                    },
-                                    leading: CircleAvatar(child: Text("${_list[i].getnPezziC()[j]}")),
-                                    title: Text("codice: ${_list[i].getCodiciC()[j]}"),
-                                    subtitle: Text("data: ${_list[i].getDateC()[j]}"),
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: ButtonBar(
-                                          alignment: MainAxisAlignment.spaceAround,
-                                          buttonHeight: 52.0,
-                                          buttonMinWidth: 90.0,
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: TextButton(
-                                                style: flatButtonStyle,
-                                                onPressed: () {
-                                                  VaiImpegna(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
-                                                      _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
-                                                },
-                                                child: const Column(
-                                                  children: <Widget>[
-                                                    Icon(Icons.arrow_downward),
-                                                    Padding(
-                                                      padding: EdgeInsets.symmetric(vertical: 2.0),
+                    Expanded(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _list[i].sommaCodici(),
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (BuildContext context, int j){
+                              child: Card(
+                                    child: Expanded(
+                                      child: ExpansionTile(
+                                        onExpansionChanged: (bool change) {
+                                        },
+                                        leading: CircleAvatar(child: Text("${_list[i].getnPezziC()[j]}")),
+                                        title: Text("codice: ${_list[i].getCodiciC()[j]}"),
+                                        subtitle: Text("data: ${_list[i].getDateC()[j]}"),
+                                        children: <Widget>[
+                                          ButtonBar(
+                                              alignment: MainAxisAlignment.spaceAround,
+                                              buttonHeight: 52.0,
+                                              buttonMinWidth: 90.0,
+                                              children: <Widget>[
+                                                  TextButton(
+                                                    style: flatButtonStyle,
+                                                    onPressed: () {
+                                                      VaiImpegna(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
+                                                          _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
+                                                    },
+                                                    child: const Column(
+                                                      children: <Widget>[
+                                                        Icon(Icons.arrow_downward),
+                                                        Padding(
+                                                          padding: EdgeInsets.symmetric(vertical: 2.0),
+                                                        ),
+                                                        Text('Impegna'),
+                                                      ],
                                                     ),
-                                                    Text('Impegna'),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: TextButton(
-                                                style: flatButtonStyle,
-                                                onPressed: () {
-                                                  VaiResi(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
-                                                      _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
-                                                },
-                                                child: const Column(
-                                                  children: <Widget>[
-                                                    Icon(Icons.arrow_upward),
-                                                    Padding(
-                                                      padding: EdgeInsets.symmetric(vertical: 2.0),
+                                                  ),
+                                                  TextButton(
+                                                    style: flatButtonStyle,
+                                                    onPressed: () {
+                                                      VaiResi(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
+                                                          _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
+                                                    },
+                                                    child: const Column(
+                                                      children: <Widget>[
+                                                        Icon(Icons.arrow_upward),
+                                                        Padding(
+                                                          padding: EdgeInsets.symmetric(vertical: 2.0),
+                                                        ),
+                                                        Text('Reso'),
+                                                      ],
                                                     ),
-                                                    Text('Reso'),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: TextButton(
-                                                style: flatButtonStyle,
-                                                onPressed: () {
-                                                },
-                                                child: const Column(
-                                                  children: <Widget>[
-                                                    Icon(Icons.swap_vert),
-                                                    Padding(
-                                                      padding: EdgeInsets.symmetric(vertical: 2.0),
+                                                  ),
+                                                  TextButton(
+                                                    style: flatButtonStyle,
+                                                    onPressed: () {
+                                                    },
+                                                    child: const Column(
+                                                      children: <Widget>[
+                                                        Icon(Icons.swap_vert),
+                                                        Padding(
+                                                          padding: EdgeInsets.symmetric(vertical: 2.0),
+                                                        ),
+                                                        Text('Elimina'),
+                                                      ],
                                                     ),
-                                                    Text('Elimina'),
-                                                  ],
-                                                ),
-                                              ),
+                                                  ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                            ),
-                          );
-                        }
+                                    ),
+                              );
+                          }
+                      ),
                     ),
-                  ),
                 ],
               ),
             );
