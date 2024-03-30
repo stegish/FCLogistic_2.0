@@ -54,8 +54,9 @@ class _VTotaleState extends State<VTotale> {
         ris.add(Card(
           child: ListTile(
             leading: const CircleAvatar(child: Icon(Icons.storage)),
-            title: Text("bancale: ${data[i]['nomeBR']}"),
-            subtitle: Text("codice: ${data[i]['codicePR']}"),
+            title: Text("codice: ${data[i]['codicePR']}"),
+            subtitle: Text("bancale: ${data[i]['nomeBR']}"),
+            trailing: Text("azienda: ${data[i]['nome_aziendaR']}"),
           ),
         ));
       }
@@ -81,8 +82,9 @@ class _VTotaleState extends State<VTotale> {
         ris.add(Card(
           child: ListTile(
             leading: const CircleAvatar(child: Icon(Icons.storage)),
-            title: Text("codice: ${data[i]['nomeBI']}"),
-            subtitle: Text("codice: ${data[i]['codicePI']}"),
+            title: Text("codice: ${data[i]['codicePI']}"),
+            subtitle: Text("bancale: ${data[i]['nomeBI']}"),
+            trailing: Text("commessa: ${data[i]['commessaI']}"),
           ),
         ));
       }
@@ -125,10 +127,6 @@ class _VTotaleState extends State<VTotale> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Resi(riga: d)),);
   }
 
-  Cerca(){
-    getData(_currentPage);
-  }
-
   void _loadMore() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !_isLoading) {
       _currentPage++;
@@ -143,9 +141,7 @@ class _VTotaleState extends State<VTotale> {
         title: const Center(child: Text('MAGAZZINO',
             style: TextStyle(fontWeight: FontWeight.bold))),
       ),
-      body: _error != ""
-          ? Center(child: Text('Error: $_error'),)
-          : Column(
+      body: Column(
             children: [
                 SizedBox(
                   height: 80,
@@ -157,7 +153,9 @@ class _VTotaleState extends State<VTotale> {
                       hintText: 'inserire il codice o bancale',
                       labelText: 'cerca',
                     ),
-                    //onChanged: Cerca(),
+                    onChanged: (text) {
+                      getData(_currentPage);
+                    },
                   ),
                 ),
               ButtonBar(
@@ -176,7 +174,7 @@ class _VTotaleState extends State<VTotale> {
                     onPressed: () {
                       setState(() {
                         selected="impegnati";
-                        Cerca();
+                        getData(_currentPage);
                       });
 
                     },
@@ -197,7 +195,7 @@ class _VTotaleState extends State<VTotale> {
                     onPressed: () {
                       setState(() {
                         selected="resi";
-                        Cerca();
+                        getData(_currentPage);
                       });
                     },
                     child: const Column(

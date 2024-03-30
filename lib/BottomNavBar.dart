@@ -1,4 +1,5 @@
 import 'package:fcmagazzino/VTotale.dart';
+import 'package:fcmagazzino/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -22,7 +23,7 @@ class BottomNavBar extends StatefulWidget{
     return [
       const Trova(),
       const Carica(),
-      MagazzinoCompleto(),
+      Home(),
       VTotale(),
       VTotale(),
     ];
