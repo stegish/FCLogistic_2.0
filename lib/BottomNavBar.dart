@@ -1,3 +1,4 @@
+import 'package:fcmagazzino/VTotale.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -22,6 +23,8 @@ class BottomNavBar extends StatefulWidget{
       const Trova(),
       const Carica(),
       MagazzinoCompleto(),
+      VTotale(),
+      VTotale(),
     ];
   }
 
@@ -47,6 +50,18 @@ class BottomNavBar extends StatefulWidget{
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.list_bullet),
+        title: ("visualizza"),
+        activeColorPrimary: CupertinoColors.systemRed,
+        inactiveColorPrimary: CupertinoColors.black,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.list),
+        title: ("visualizza"),
+        activeColorPrimary: CupertinoColors.systemRed,
+        inactiveColorPrimary: CupertinoColors.black,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.list),
         title: ("visualizza"),
         activeColorPrimary: CupertinoColors.systemRed,
         inactiveColorPrimary: CupertinoColors.black,
