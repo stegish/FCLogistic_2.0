@@ -131,7 +131,7 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
             style: TextStyle(fontWeight: FontWeight.bold))),
       ),
       body: _error != ""
-          ? Center(child: Text('Error: $_error'),)
+          ? Center(child: Text('errore schermata home: $_error'),)
           : ListView.builder(
         controller: _scrollController,
         itemCount: _list.length + (_isLoading ? 1 : 0),

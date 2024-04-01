@@ -50,8 +50,8 @@ class BottomNavBar extends StatefulWidget{
         inactiveColorPrimary: CupertinoColors.black,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.list_bullet),
-        title: ("visualizza"),
+        icon: const Icon(CupertinoIcons.home),
+        title: ("home"),
         activeColorPrimary: CupertinoColors.systemRed,
         inactiveColorPrimary: CupertinoColors.black,
       ),

@@ -23,7 +23,6 @@ class _VTotaleState extends State<VTotale> {
   int _currentPage = 1;
   bool _isLoading = false;
   String selected="resi";
-  late String _error;
 
   @override
   void initState() {
@@ -54,7 +53,8 @@ class _VTotaleState extends State<VTotale> {
         ris.add(Card(
           child: ListTile(
             leading: const CircleAvatar(child: Icon(Icons.storage)),
-            title: Text("codice: ${data[i]['codicePR']}"),
+            title: Text("codice: ${data[i]['codicePR']}",
+            style: TextStyle(fontSize: 14),),
             subtitle: Text("bancale: ${data[i]['nomeBR']}"),
             trailing: Text("azienda: ${data[i]['nome_aziendaR']}"),
           ),
@@ -82,7 +82,8 @@ class _VTotaleState extends State<VTotale> {
         ris.add(Card(
           child: ListTile(
             leading: const CircleAvatar(child: Icon(Icons.storage)),
-            title: Text("codice: ${data[i]['codicePI']}"),
+            title: Text("codice: ${data[i]['codicePI']}",
+                style: TextStyle(fontSize: 14)),
             subtitle: Text("bancale: ${data[i]['nomeBI']}"),
             trailing: Text("commessa: ${data[i]['commessaI']}"),
           ),
@@ -99,7 +100,6 @@ class _VTotaleState extends State<VTotale> {
     List<Widget> ris = [];
     setState(() {
       _isLoading = true;
-      _error = "";
     });
     try {
       if(selected=="resi"){
@@ -110,7 +110,6 @@ class _VTotaleState extends State<VTotale> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _error = e.toString();
       });
     }
     setState(() {
