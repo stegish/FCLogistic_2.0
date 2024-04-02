@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'DBancale.dart';
 import 'DMag.dart';
 import 'VMagazzino.dart';
@@ -20,8 +21,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home>{
-  List<FlSpot> resi= [];
-  List<FlSpot> impegnati = [];
+  bool _isLoading= true;
+  List<BarChartGroupData> dati = [];
 
   @override
   void initState() {
@@ -39,7 +40,12 @@ class _HomeState extends State<Home>{
     var responseD = jsonDecode(response.body);
     if(responseD['success']==true){
       var data = responseD['data'];
-      return data.length;
+      print(data);
+      if(data['somma']==null){
+        return 0;
+      }else{
+        return int.parse(data['somma']);
+      }
     }else{
       throw Exception(responseD['error']);
     }
@@ -54,52 +60,76 @@ class _HomeState extends State<Home>{
     var responseD = jsonDecode(response.body);
     if(responseD['success']==true){
       var data = responseD['data'];
-      return data.length;
+      return int.parse(data["somma"]);
     }else{
       throw Exception(responseD['error']);
     }
+  }
 
+  Future<int> pezziAggiunti(String mese) async{
+    http.Response response = await http.post(
+        Uri.parse('http://188.12.130.133:1717/MeseAggiunti.php'),
+        body: {
+          'mese' : mese,
+        });
+    var responseD = jsonDecode(response.body);
+    if(responseD['success']==true){
+      var data = responseD['data'];
+      return int.parse(data["somma"]);
+    }else{
+      throw Exception(responseD['error']);
+    }
   }
 
 
   Future<void> getData() async {
+
     DateTime mese = DateTime.now();
-    for(int i=0; i<12; i++){
-      int meser =  await getResiFromMounth(mese.month.toString());
-      int mesei = await getResiFromMounth(mese.month.toString());
-      resi.add(FlSpot(i.toDouble(), meser.toDouble()));
-      impegnati.add(FlSpot(i.toDouble(), mesei.toDouble()));
+    for(int i=0; i<4; i++){
+      int meser = await getResiFromMounth(mese.month.toString());
+      int mesei = await getImpegnatiFromMounth(mese.month.toString());
+      dati.add(BarChartGroupData(x: mese.month, barRods: [
+        BarChartRodData(fromY: 0, toY: meser.toDouble(), width: 15, color: Colors.blue),
+        BarChartRodData(fromY: 0, toY: mesei.toDouble(), width: 15, color: Colors.green),
+      ]));
       mese = DateTime(mese.year, mese.month-1, mese.day);
     }
-
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      appBar: AppBar(
+        title: const Center(child: Text('MAGAZZINO',
+            style: TextStyle(fontWeight: FontWeight.bold))),
+      ),
+      body: _isLoading == true ? const Center(child: CircularProgressIndicator()) :
+      Container(
         padding: const EdgeInsets.all(20),
         width: double.infinity,
-        child: LineChart(
-          LineChartData(
-            borderData: FlBorderData(show: false),
-            lineBarsData: [
-              // The red line
-              LineChartBarData(
-                spots: resi,
-                isCurved: true,
-                barWidth: 3,
-                color: Colors.indigo,
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top:10.0,bottom:10.0),
+                child: BarChart(
+                    BarChartData(
+                        borderData: FlBorderData(
+                        border: const Border(
+                        top: BorderSide.none,
+                          right: BorderSide.none,
+                          left: BorderSide(width: 1),
+                          bottom: BorderSide(width: 1),
+                        )),
+                        groupsSpace: 10,
+                        barGroups: dati)),
               ),
-              // The orange line
-              LineChartBarData(
-                spots: impegnati,
-                isCurved: true,
-                barWidth: 3,
-                color: Colors.red,
-              ),
-            ],
-          ),
+    ),
+            Text("data"),
+          ],
         ),
       ),
     );
