@@ -1,11 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'Impegna.dart';
-import 'Resi.dart';
+
 import 'DBancale.dart';
 import 'DMag.dart';
-
+import 'Impegna.dart';
+import 'Resi.dart';
 
 class MagazzinoCompleto extends StatefulWidget {
   @override
@@ -41,9 +42,7 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
     try {
       http.Response response = await http.post(
         Uri.parse('http://188.12.130.133:1717/contenutoBancale.php'),
-        body: {
-          'bancale': nomeB
-        },
+        body: {'bancale': nomeB},
       );
       var responseD = jsonDecode(response.body);
       print(responseD);
@@ -51,10 +50,10 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
         setState(() {
           List<dynamic> data = responseD['data'];
           print(data);
-          List<int> codici=[];
-          List<int> nPezzi=[];
-          List<String> date=[];
-          for(int i =0; i<data.length;++i) {
+          List<int> codici = [];
+          List<int> nPezzi = [];
+          List<String> date = [];
+          for (int i = 0; i < data.length; ++i) {
             codici.add(int.parse(data[i]["codicePM"]));
             nPezzi.add(int.parse(data[i]["quantitaM"]));
             date.add(data[i]["data_inserimentoM"]);
@@ -79,21 +78,22 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
       _error = "";
     });
     try {
-    final response = await http.post(Uri.parse('http://188.12.130.133:1717/magazzinoCompleto.php'));
-    var responseD = jsonDecode(response.body);
-    if (true == responseD['success']) {
-      setState(() {
-        List<dynamic> data = responseD['data'];
-        print(data);
-        for(int i =0; i<data.length;++i) {
-          print(data[i]["nomeB"]);
-          getContenutoBancale(data[i]["nomeB"], data[i]["data_creazioneB"]);
-        }
-        _isLoading = false;
-      });
-    } else {
-      throw Exception('Failed to load data');
-    }
+      final response = await http
+          .post(Uri.parse('http://188.12.130.133:1717/magazzinoCompleto.php'));
+      var responseD = jsonDecode(response.body);
+      if (true == responseD['success']) {
+        setState(() {
+          List<dynamic> data = responseD['data'];
+          print(data);
+          for (int i = 0; i < data.length; ++i) {
+            print(data[i]["nomeB"]);
+            getContenutoBancale(data[i]["nomeB"], data[i]["data_creazioneB"]);
+          }
+          _isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load data');
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;
@@ -102,12 +102,18 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
     }
   }
 
-  void VaiImpegna(DMag d){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Impegna(riga: d)),);
+  void VaiImpegna(DMag d) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Impegna(riga: d)),
+    );
   }
 
-  void VaiResi(DMag d){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Resi(riga: d)),);
+  void VaiResi(DMag d) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Resi(riga: d)),
+    );
   }
 
   final ButtonStyle flatButtonStyle = TextButton.styleFrom(
@@ -117,7 +123,9 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
   );
 
   void _loadMore() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !_isLoading) {
+    if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent &&
+        !_isLoading) {
       _currentPage++;
       _fetchData(_currentPage);
     }
@@ -127,105 +135,125 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('MAGAZZINO',
-            style: TextStyle(fontWeight: FontWeight.bold))),
+        title: const Center(
+            child: Text('MAGAZZINO',
+                style: TextStyle(fontWeight: FontWeight.bold))),
       ),
       body: _error != ""
-          ? Center(child: Text('errore schermata home: $_error'),)
+          ? Center(
+              child: Text('errore schermata home: $_error'),
+            )
           : ListView.builder(
-        controller: _scrollController,
-        itemCount: _list.length + (_isLoading ? 1 : 0),
-        itemBuilder: (BuildContext context, int i) {
-          if (i == _list.length) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            return Container(
-              child: ExpansionTile(
-                leading: CircleAvatar(child: Text("${_list[i].sommaCodici()}")),
-                title: Text("BANCALE: ${_list[i].getBancale()}"),
-                subtitle: Text("data creazione: ${_list[i].getData()}"),
-                children: <Widget>[
-                    Expanded(
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _list[i].sommaCodici(),
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (BuildContext context, int j){
-                                  Card(
-                                    child: Expanded(
-                                      child: ExpansionTile(
-                                        onExpansionChanged: (bool change) {
-                                        },
-                                        leading: CircleAvatar(child: Text("${_list[i].getnPezziC()[j]}")),
-                                        title: Text("codice: ${_list[i].getCodiciC()[j]}"),
-                                        subtitle: Text("data: ${_list[i].getDateC()[j]}"),
-                                        children: <Widget>[
-                                          ButtonBar(
-                                              alignment: MainAxisAlignment.spaceAround,
-                                              buttonHeight: 52.0,
-                                              buttonMinWidth: 90.0,
-                                              children: <Widget>[
-                                                  TextButton(
-                                                    style: flatButtonStyle,
-                                                    onPressed: () {
-                                                      VaiImpegna(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
-                                                          _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
-                                                    },
-                                                    child: const Column(
-                                                      children: <Widget>[
-                                                        Icon(Icons.arrow_downward),
-                                                        Padding(
-                                                          padding: EdgeInsets.symmetric(vertical: 2.0),
-                                                        ),
-                                                        Text('Impegna'),
-                                                      ],
-                                                    ),
+              controller: _scrollController,
+              itemCount: _list.length + (_isLoading ? 1 : 0),
+              itemBuilder: (BuildContext context, int i) {
+                if (i == _list.length) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return Container(
+                    child: ExpansionTile(
+                      leading: CircleAvatar(
+                          child: Text("${_list[i].sommaCodici()}")),
+                      title: Text("BANCALE: ${_list[i].getBancale()}"),
+                      subtitle: Text("data creazione: ${_list[i].getData()}"),
+                      children: <Widget>[
+                        Expanded(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _list[i].sommaCodici(),
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (BuildContext context, int j) {
+                                Card(
+                                  child: Expanded(
+                                    child: ExpansionTile(
+                                      onExpansionChanged: (bool change) {},
+                                      leading: CircleAvatar(
+                                          child: Text(
+                                              "${_list[i].getnPezziC()[j]}")),
+                                      title: Text(
+                                          "codice: ${_list[i].getCodiciC()[j]}"),
+                                      subtitle: Text(
+                                          "data: ${_list[i].getDateC()[j]}"),
+                                      children: <Widget>[
+                                        ButtonBar(
+                                          alignment:
+                                              MainAxisAlignment.spaceAround,
+                                          buttonHeight: 52.0,
+                                          buttonMinWidth: 90.0,
+                                          children: <Widget>[
+                                            TextButton(
+                                              style: flatButtonStyle,
+                                              onPressed: () {
+                                                VaiImpegna(DMag(
+                                                    _list[i].getCodiciC()[j],
+                                                    _list[i].getBancale(),
+                                                    _list[i].getnPezziC()[j],
+                                                    _list[i].getDateC()[j],
+                                                    0));
+                                              },
+                                              child: const Column(
+                                                children: <Widget>[
+                                                  Icon(Icons.arrow_downward),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 2.0),
                                                   ),
-                                                  TextButton(
-                                                    style: flatButtonStyle,
-                                                    onPressed: () {
-                                                      VaiResi(DMag(_list[i].getCodiciC()[j], _list[i].getBancale(),
-                                                          _list[i].getnPezziC()[j], _list[i].getDateC()[j]));
-                                                    },
-                                                    child: const Column(
-                                                      children: <Widget>[
-                                                        Icon(Icons.arrow_upward),
-                                                        Padding(
-                                                          padding: EdgeInsets.symmetric(vertical: 2.0),
-                                                        ),
-                                                        Text('Reso'),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  TextButton(
-                                                    style: flatButtonStyle,
-                                                    onPressed: () {
-                                                    },
-                                                    child: const Column(
-                                                      children: <Widget>[
-                                                        Icon(Icons.swap_vert),
-                                                        Padding(
-                                                          padding: EdgeInsets.symmetric(vertical: 2.0),
-                                                        ),
-                                                        Text('Elimina'),
-                                                      ],
-                                                    ),
-                                                  ),
-                                              ],
+                                                  Text('Impegna'),
+                                                ],
+                                              ),
                                             ),
-                                        ],
-                                      ),
+                                            TextButton(
+                                              style: flatButtonStyle,
+                                              onPressed: () {
+                                                VaiResi(DMag(
+                                                    _list[i].getCodiciC()[j],
+                                                    _list[i].getBancale(),
+                                                    _list[i].getnPezziC()[j],
+                                                    _list[i].getDateC()[j],
+                                                    0));
+                                              },
+                                              child: const Column(
+                                                children: <Widget>[
+                                                  Icon(Icons.arrow_upward),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 2.0),
+                                                  ),
+                                                  Text('Reso'),
+                                                ],
+                                              ),
+                                            ),
+                                            TextButton(
+                                              style: flatButtonStyle,
+                                              onPressed: () {},
+                                              child: const Column(
+                                                children: <Widget>[
+                                                  Icon(Icons.swap_vert),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 2.0),
+                                                  ),
+                                                  Text('Elimina'),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                              );
-                          }
-                      ),
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
                     ),
-                ],
-              ),
-            );
-          }
-        },
-      ),
+                  );
+                }
+              },
+            ),
     );
   }
 }
