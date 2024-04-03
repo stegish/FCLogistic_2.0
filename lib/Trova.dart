@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'DMag.dart';
 import 'VMagazzino.dart';
 import 'snakBar.dart';
@@ -27,7 +26,8 @@ class _TrovaState extends State<Trova> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => VMagazzino(listaRisultati: risultato)),
+          builder: (context) =>
+              ScaffoldMessenger(child: VMagazzino(listaRisultati: risultato))),
     );
   }
 
@@ -65,7 +65,7 @@ class _TrovaState extends State<Trova> {
     risultato = await getData();
     if (risultato.isEmpty) {
       GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
-          "codice non trovato", "fallito");
+          "codice non trovato o connessione assente", "fallito");
     } else {
       VaiVMagazzino();
     }
@@ -116,6 +116,9 @@ class _TrovaState extends State<Trova> {
         onPressed: () {
           if (_TrovaF.currentState!.validate()) {
             avviaRicerca();
+          } else {
+            GlobalValues.showSnackbar(ScaffoldMessenger.of(context),
+                "ATTENZIONE", "controllare valori inseiri", "attezione");
           }
         },
         tooltip: 'ricerca',

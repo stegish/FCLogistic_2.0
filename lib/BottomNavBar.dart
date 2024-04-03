@@ -10,7 +10,7 @@ import 'MagazzinoCompleto.dart';
 
 class BottomNavBar extends StatefulWidget{
   const BottomNavBar({super.key});
-
+  
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
   }
@@ -21,11 +21,11 @@ class BottomNavBar extends StatefulWidget{
 
   List<Widget> _buildScreens() {
     return [
-      const Trova(),
-      const Carica(),
-      Home(),
-      VTotale(),
-      VTotale(),
+      const ScaffoldMessenger(child: Trova()),
+      const ScaffoldMessenger(child: Carica()),
+      const ScaffoldMessenger(child: Home()),
+      const ScaffoldMessenger(child: VTotale()),
+      ScaffoldMessenger(child: MagazzinoCompleto()),
     ];
   }
 

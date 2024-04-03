@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:fcmagazzino/snakBar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -23,107 +25,157 @@ class _HomeState extends State<Home> {
   }
 
   Future<int> getResiFromDay() async {
-    http.Response response =
-        await http.post(Uri.parse('http://188.12.130.133:1717/MeseReso.php'));
-    var responseD = jsonDecode(response.body);
-    if (responseD['success'] == true) {
-      var data = responseD['data'];
-      if (data[0]['somma'] == null) {
-        return 0;
+    try {
+      http.Response response =
+          await http.post(Uri.parse('http://188.12.130.133:1717/MeseReso.php'));
+      var responseD = jsonDecode(response.body);
+      if (responseD['success'] == true) {
+        var data = responseD['data'];
+        if (data[0]['somma'] == null) {
+          return 0;
+        } else {
+          return int.parse(data[0]['somma']);
+        }
       } else {
-        return int.parse(data[0]['somma']);
+        GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+            "problemi con i valori o connessione assente", "fallito");
+        throw ("");
       }
-    } else {
-      throw Exception(responseD['error']);
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
     }
   }
 
   Future<int> getResiFromMounth(String mese) async {
-    http.Response response = await http
-        .post(Uri.parse('http://188.12.130.133:1717/MeseReso.php'), body: {
-      'mese': mese,
-    });
-    var responseD = jsonDecode(response.body);
-    if (responseD['success'] == true) {
-      var data = responseD['data'];
-      if (data[0]['somma'] == null) {
-        return 0;
+    try {
+      http.Response response = await http
+          .post(Uri.parse('http://188.12.130.133:1717/MeseReso.php'), body: {
+        'mese': mese,
+      });
+      var responseD = jsonDecode(response.body);
+      if (responseD['success'] == true) {
+        var data = responseD['data'];
+        if (data[0]['somma'] == null) {
+          return 0;
+        } else {
+          return int.parse(data[0]['somma']);
+        }
       } else {
-        return int.parse(data[0]['somma']);
+        GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+            "problemi con i valori o connessione assente", "fallito");
+        throw ("");
       }
-    } else {
-      throw Exception(responseD['error']);
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
     }
   }
 
   Future<int> getImpegnatiFromMDay() async {
-    http.Response response = await http
-        .post(Uri.parse('http://188.12.130.133:1717/MeseImpegnati.php'));
-    var responseD = jsonDecode(response.body);
-    if (responseD['success'] == true) {
-      var data = responseD['data'];
-      print(data);
-      if (data[0]['somma'] == null) {
-        return 0;
+    try {
+      http.Response response = await http
+          .post(Uri.parse('http://188.12.130.133:1717/MeseImpegnati.php'));
+      var responseD = jsonDecode(response.body);
+      if (responseD['success'] == true) {
+        var data = responseD['data'];
+        print(data);
+        if (data[0]['somma'] == null) {
+          return 0;
+        } else {
+          return int.parse(data[0]['somma']);
+        }
       } else {
-        return int.parse(data[0]['somma']);
+        GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+            "problemi con i valori o connessione assente", "fallito");
+        throw ("");
       }
-    } else {
-      throw Exception(responseD['error']);
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
     }
   }
 
   Future<int> getImpegnatiFromMounth(String mese) async {
-    http.Response response = await http
-        .post(Uri.parse('http://188.12.130.133:1717/MeseImpegnati.php'), body: {
-      'mese': mese,
-    });
-    var responseD = jsonDecode(response.body);
-    if (responseD['success'] == true) {
-      var data = responseD['data'];
-      print(data);
-      if (data[0]['somma'] == null) {
-        return 0;
+    try {
+      http.Response response = await http.post(
+          Uri.parse('http://188.12.130.133:1717/MeseImpegnati.php'),
+          body: {
+            'mese': mese,
+          });
+      var responseD = jsonDecode(response.body);
+      if (responseD['success'] == true) {
+        var data = responseD['data'];
+        print(data);
+        if (data[0]['somma'] == null) {
+          return 0;
+        } else {
+          return int.parse(data[0]['somma']);
+        }
       } else {
-        return int.parse(data[0]['somma']);
+        GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+            "problemi con i valori o connessione assente", "fallito");
+        throw ("");
       }
-    } else {
-      throw Exception(responseD['error']);
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
     }
   }
 
   Future<int> getAggiuntiFromMonth(String mese) async {
-    http.Response response = await http
-        .post(Uri.parse('http://188.12.130.133:1717/MeseAggiunti.php'), body: {
-      'mese': mese,
-    });
-    var responseD = jsonDecode(response.body);
-    if (responseD['success'] == true) {
-      var data = responseD['data'];
-      if (data[0]['somma'] == null) {
-        return 0;
+    try {
+      http.Response response = await http.post(
+          Uri.parse('http://188.12.130.133:1717/MeseAggiunti.php'),
+          body: {
+            'mese': mese,
+          });
+      var responseD = jsonDecode(response.body);
+      if (responseD['success'] == true) {
+        var data = responseD['data'];
+        if (data[0]['somma'] == null) {
+          return 0;
+        } else {
+          return int.parse(data[0]['somma']);
+        }
       } else {
-        return int.parse(data[0]['somma']);
+        GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+            "problemi con i valori o connessione assente", "fallito");
+        throw ("");
       }
-    } else {
-      throw Exception(responseD['error']);
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
     }
   }
 
   Future<int> getAggiuntiFromDay() async {
-    http.Response response = await http
-        .post(Uri.parse('http://188.12.130.133:1717/GiornoAggiunti.php'));
-    var responseD = jsonDecode(response.body);
-    if (responseD['success'] == true) {
-      var data = responseD['data'];
-      print(data);
-      if (data[0]['somma'] == null) {
-        return 0;
+    try {
+      http.Response response = await http
+          .post(Uri.parse('http://188.12.130.133:1717/GiornoAggiunti.php'));
+      var responseD = jsonDecode(response.body);
+      if (responseD['success'] == true) {
+        var data = responseD['data'];
+        print(data);
+        if (data[0]['somma'] == null) {
+          return 0;
+        } else {
+          return int.parse(data[0]['somma']);
+        }
       } else {
-        return int.parse(data[0]['somma']);
+        GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+            "problemi con i valori o connessione assente", "fallito");
+        throw ("");
       }
-    } else {
-      throw Exception(responseD['error']);
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
     }
   }
 

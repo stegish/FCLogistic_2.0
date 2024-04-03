@@ -21,6 +21,8 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
   late String _error;
   int expanded = 0;
 
+  //TODO:risolvere problema visualizzazzione
+
   @override
   void initState() {
     super.initState();
@@ -163,7 +165,7 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
                               itemCount: _list[i].sommaCodici(),
                               scrollDirection: Axis.vertical,
                               itemBuilder: (BuildContext context, int j) {
-                                Card(
+                                return Card(
                                   child: Expanded(
                                     child: ExpansionTile(
                                       onExpansionChanged: (bool change) {},

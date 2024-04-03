@@ -22,14 +22,18 @@ class _VMagazzinoPageState extends State<VMagazzino> {
   void VaiImpegna(int index) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Impegna(riga: risultati[index])),
+      MaterialPageRoute(
+          builder: (context) =>
+              ScaffoldMessenger(child: Impegna(riga: risultati[index]))),
     );
   }
 
   void VaiResi(int index) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Resi(riga: risultati[index])),
+      MaterialPageRoute(
+          builder: (context) =>
+              ScaffoldMessenger(child: Resi(riga: risultati[index]))),
     );
   }
 
