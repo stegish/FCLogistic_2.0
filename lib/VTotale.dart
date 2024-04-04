@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'Impegna.dart';
-import 'Resi.dart';
-import 'DMag.dart';
+import 'dart:io';
+
+import 'package:fcmagazzino/snakBar.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class VTotale extends StatefulWidget {
   const VTotale({super.key});
@@ -18,15 +16,13 @@ class _VTotaleState extends State<VTotale> {
   final _scrollController = ScrollController();
   List<Widget> _list = [];
   final input = [TextEditingController()]; //variabile per l'input
-  int _currentPage = 1;
   bool _isLoading = false;
   String selected = "resi";
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_loadMore);
-    getData(_currentPage);
+    getData();
   }
 
   @override
@@ -35,77 +31,104 @@ class _VTotaleState extends State<VTotale> {
     super.dispose();
   }
 
-  Future<List<Widget>> getResi(int pageKey) async {
+  Future<List<Widget>> getResi() async {
     List<Widget> ris = [];
-    //TODO: togliere duplicati
-    //TODO: caricare i risultati in base allo scorrimento
+    try {
+      final response = await http
+          .post(Uri.parse('http://188.12.130.133:1717/getResi.php'), body: {
+        'input': input[0].text,
+      });
+      var responseD = jsonDecode(response.body);
+      print(responseD);
+      var data = responseD['data'];
 
-    final response = await http
-        .post(Uri.parse('http://188.12.130.133:1717/getResi.php'), body: {
-      'input': input[0].text,
-    });
-    var responseD = jsonDecode(response.body);
-    print(responseD);
-    var data = responseD['data'];
-    if (true == responseD['success']) {
-      for (int i = 0; i < data.length; i++) {
-        ris.add(Card(
-          child: ListTile(
-            leading: const CircleAvatar(child: Icon(Icons.storage)),
-            title: Text(
-              "codice: ${data[i]['codicePR']}",
-              style: TextStyle(fontSize: 14),
+      if (true == responseD['success']) {
+        for (int i = 0; i < data.length; i++) {
+          ris.add(Card(
+            child: ListTile(
+              leading: const CircleAvatar(child: Icon(Icons.storage)),
+              title: Text(
+                "codice: ${data[i]['codicePR']}",
+                style: TextStyle(fontSize: 14),
+              ),
+              subtitle: Text("bancale: ${data[i]['nomeBR']}"),
+              trailing: Text("azienda: ${data[i]['nome_aziendaR']}"),
             ),
-            subtitle: Text("bancale: ${data[i]['nomeBR']}"),
-            trailing: Text("azienda: ${data[i]['nome_aziendaR']}"),
-          ),
-        ));
-      }
-      return ris;
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
-
-  Future<List<Widget>> getImpegnati(int pageKey) async {
-    List<Widget> ris = [];
-
-    final response = await http
-        .post(Uri.parse('http://188.12.130.133:1717/getImpegnati.php'), body: {
-      'input': input[0].text,
-    });
-    var responseD = jsonDecode(response.body);
-    print(responseD);
-    var data = responseD['data'];
-    if (true == responseD['success']) {
-      for (int i = 0; i < data.length; i++) {
-        ris.add(Card(
+          ));
+        }
+        ris.toSet().toList();
+        return ris;
+      } else {
+        ris.add(const Card(
           child: ListTile(
-            leading: const CircleAvatar(child: Icon(Icons.storage)),
-            title: Text("codice: ${data[i]['codicePI']}",
+            leading: CircleAvatar(child: Icon(Icons.storage)),
+            title: Text("NESSUN RISULTATO TROVATO",
                 style: TextStyle(fontSize: 14)),
-            subtitle: Text("bancale: ${data[i]['nomeBI']}"),
-            trailing: Text("commessa: ${data[i]['commessaI']}"),
+            trailing: Icon(Icons.warning),
           ),
         ));
+        return ris;
       }
-      return ris;
-    } else {
-      throw Exception('Failed to load data');
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
     }
   }
 
-  Future<void> getData(int page) async {
-    int page = 0;
+  Future<List<Widget>> getImpegnati() async {
+    List<Widget> ris = [];
+    try {
+      final response = await http.post(
+          Uri.parse('http://188.12.130.133:1717/getImpegnati.php'),
+          body: {
+            'input': input[0].text,
+          });
+      var responseD = jsonDecode(response.body);
+      print(responseD);
+      var data = responseD['data'];
+      if (true == responseD['success']) {
+        for (int i = 0; i < data.length; i++) {
+          ris.add(Card(
+            child: ListTile(
+              leading: const CircleAvatar(child: Icon(Icons.storage)),
+              title: Text("codice: ${data[i]['codicePI']}",
+                  style: TextStyle(fontSize: 14)),
+              subtitle: Text("bancale: ${data[i]['nomeBI']}"),
+              trailing: Text("commessa: ${data[i]['commessaI']}"),
+            ),
+          ));
+        }
+        ris.toSet().toList();
+        return ris;
+      } else {
+        ris.add(const Card(
+          child: ListTile(
+            leading: CircleAvatar(child: Icon(Icons.storage)),
+            title: Text("NESSUN RISULTATO TROVATO",
+                style: TextStyle(fontSize: 14)),
+            trailing: Icon(Icons.warning),
+          ),
+        ));
+        return ris;
+      }
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
+    }
+  }
+
+  Future<void> getData() async {
     List<Widget> ris = [];
     setState(() {
       _isLoading = true;
     });
     try {
       if (selected == "resi") {
-        ris = await getResi(page);
+        ris = await getResi();
       } else if (selected == "impegnati") {
-        ris = await getImpegnati(page);
+        ris = await getImpegnati();
       }
     } catch (e) {
       setState(() {
@@ -116,29 +139,6 @@ class _VTotaleState extends State<VTotale> {
       _isLoading = false;
       _list = ris;
     });
-  }
-
-  void VaiImpegna(DMag d) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Impegna(riga: d)),
-    );
-  }
-
-  void VaiResi(DMag d) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Resi(riga: d)),
-    );
-  }
-
-  void _loadMore() {
-    if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent &&
-        !_isLoading) {
-      _currentPage++;
-      getData(_currentPage);
-    }
   }
 
   @override
@@ -162,7 +162,7 @@ class _VTotaleState extends State<VTotale> {
                 labelText: 'cerca',
               ),
               onChanged: (text) {
-                getData(_currentPage);
+                getData();
               },
             ),
           ),
@@ -183,7 +183,7 @@ class _VTotaleState extends State<VTotale> {
                 onPressed: () {
                   setState(() {
                     selected = "impegnati";
-                    getData(_currentPage);
+                    getData();
                   });
                 },
                 child: const Column(
@@ -203,7 +203,7 @@ class _VTotaleState extends State<VTotale> {
                 onPressed: () {
                   setState(() {
                     selected = "resi";
-                    getData(_currentPage);
+                    getData();
                   });
                 },
                 child: const Column(

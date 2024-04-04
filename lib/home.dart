@@ -169,7 +169,7 @@ class _HomeState extends State<Home> {
         }
       } else {
         GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
-            "problemi con i valori o connessione assente", "fallito");
+            "problemi con i valori", "fallito");
         throw ("");
       }
     } on SocketException catch (_) {

@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:fcmagazzino/snakBar.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Carica extends StatefulWidget {
   const Carica({Key? key}) : super(key: key);
@@ -28,46 +29,58 @@ class _CaricaState extends State<Carica> {
   Future<List<String>> RealTimeSearch(String banc) async {
     List<String> risultato = [];
     var url = "http://188.12.130.133:1717/TrovaBancale.php";
-    http.Response response = await http.post(
-      Uri.parse(url),
-      body: {
-        'bancale': banc,
-      },
-    );
-    var responseD = jsonDecode(response.body);
-    print(responseD);
-    if (responseD['success'] == true) {
-      List<dynamic> data = responseD['data'];
-      print(data);
-      for (int i = 0; i < data.length; ++i) {
-        risultato.add(data[i]['nomeB']);
-        colonna = data[0]['colonnaB'];
+    try {
+      http.Response response = await http.post(
+        Uri.parse(url),
+        body: {
+          'bancale': banc,
+        },
+      );
+      var responseD = jsonDecode(response.body);
+      print(responseD);
+      if (responseD['success'] == true) {
+        List<dynamic> data = responseD['data'];
+        print(data);
+        for (int i = 0; i < data.length; ++i) {
+          risultato.add(data[i]['nomeB']);
+          colonna = data[0]['colonnaB'];
+        }
       }
+      return risultato;
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
     }
-    return risultato;
   }
 
   void SendData() async {
     var url = "http://188.12.130.133:1717/Carica.php";
-    http.Response response = await http.post(
-      Uri.parse(url),
-      body: {
-        'codice': input[0].text,
-        'bancale': bancale,
-        'quantita': input[1].text,
-        'data':
-            "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
-        'descrizione': '',
-        'colonna': input[3].text
-      },
-    );
-    var responseD = jsonDecode(response.body);
-    if (responseD['success'] == true) {
+    try {
+      http.Response response = await http.post(
+        Uri.parse(url),
+        body: {
+          'codice': input[0].text,
+          'bancale': bancale,
+          'quantita': input[1].text,
+          'data':
+              "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
+          'descrizione': '',
+          'colonna': input[3].text
+        },
+      );
+      var responseD = jsonDecode(response.body);
+      if (responseD['success'] == true) {
+        GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+            "dati inseriri con successo", "successo");
+      } else {
+        GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+            "errore inserimento dati", "fallito");
+      }
+    } on SocketException catch (_) {
       GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
-          "dati inseriri con successo", "successo");
-    } else {
-      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
-          "errore inserimento dati", "fallito");
+          "connessione assente", "attenzione");
+      throw ("");
     }
   }
 

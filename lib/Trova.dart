@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 import 'DMag.dart';
 import 'VMagazzino.dart';
 import 'snakBar.dart';
@@ -35,27 +37,33 @@ class _TrovaState extends State<Trova> {
   Future<List<DMag>> getData() async {
     List<DMag> ris = [];
     var url = "http://188.12.130.133:1717/Trova.php";
-    http.Response response = await http.post(
-      Uri.parse(url),
-      body: {
-        'codice': input[0].text,
-      },
-    );
-    var responseD = jsonDecode(response.body);
-    if (responseD['success'] == false) {
-      return ris;
-    } else {
-      List<dynamic> data = responseD['data'];
-      print(data);
-      for (int i = 0; i < data.length; ++i) {
-        ris.add(DMag(
-            int.parse(data[i]['codicePM']),
-            data[i]['nomeBM'],
-            int.parse(data[i]['quantitaM']),
-            data[i]['data_inserimentoM'],
-            int.parse(data[i]['colonnaB'])));
+    try {
+      http.Response response = await http.post(
+        Uri.parse(url),
+        body: {
+          'codice': input[0].text,
+        },
+      );
+      var responseD = jsonDecode(response.body);
+      if (responseD['success'] == false) {
+        return ris;
+      } else {
+        List<dynamic> data = responseD['data'];
+        print(data);
+        for (int i = 0; i < data.length; ++i) {
+          ris.add(DMag(
+              int.parse(data[i]['codicePM']),
+              data[i]['nomeBM'],
+              int.parse(data[i]['quantitaM']),
+              data[i]['data_inserimentoM'],
+              int.parse(data[i]['colonnaB'])));
+        }
+        return ris;
       }
-      return ris;
+    } on SocketException catch (_) {
+      GlobalValues.showSnackbar(ScaffoldMessenger.of(context), "ATTENZIONE",
+          "connessione assente", "attenzione");
+      throw ("");
     }
   }
 
