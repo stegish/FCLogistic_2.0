@@ -46,7 +46,8 @@ class _VTotaleState extends State<VTotale> {
                 style: TextStyle(fontSize: 14),
               ),
               subtitle: Text("bancale: ${data[i]['nomeBR']}"),
-              trailing: Text("azienda: ${data[i]['nome_aziendaR']}"),
+              trailing: Text("azienda: ${data[i]['nome_aziendaR']}\n"
+                  "data: ${data[i]['dataR']}"),
             ),
           ));
         }
@@ -89,7 +90,8 @@ class _VTotaleState extends State<VTotale> {
               title: Text("codice: ${data[i]['codicePI']}",
                   style: TextStyle(fontSize: 14)),
               subtitle: Text("bancale: ${data[i]['nomeBI']}"),
-              trailing: Text("commessa: ${data[i]['commessaI']}"),
+              trailing: Text("commessa: ${data[i]['commessaI']}\n"
+                  "data: ${data[i]['dataI']}"),
             ),
           ));
         }
