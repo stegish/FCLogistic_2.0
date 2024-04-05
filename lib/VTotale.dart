@@ -25,12 +25,6 @@ class _VTotaleState extends State<VTotale> {
     getData();
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   Future<List<Widget>> getResi() async {
     List<Widget> ris = [];
     try {
@@ -46,7 +40,7 @@ class _VTotaleState extends State<VTotale> {
         for (int i = 0; i < data.length; i++) {
           ris.add(Card(
             child: ListTile(
-              leading: const CircleAvatar(child: Icon(Icons.storage)),
+              leading: CircleAvatar(child: Text(data[i]['pezziR'].toString())),
               title: Text(
                 "codice: ${data[i]['codicePR']}",
                 style: TextStyle(fontSize: 14),
@@ -91,7 +85,7 @@ class _VTotaleState extends State<VTotale> {
         for (int i = 0; i < data.length; i++) {
           ris.add(Card(
             child: ListTile(
-              leading: const CircleAvatar(child: Icon(Icons.storage)),
+              leading: CircleAvatar(child: Text(data[i]['pezziI'].toString())),
               title: Text("codice: ${data[i]['codicePI']}",
                   style: TextStyle(fontSize: 14)),
               subtitle: Text("bancale: ${data[i]['nomeBI']}"),
@@ -146,8 +140,8 @@ class _VTotaleState extends State<VTotale> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(
-            child: Text('MAGAZZINO',
-                style: TextStyle(fontWeight: FontWeight.bold))),
+            child:
+                Text('USCITI', style: TextStyle(fontWeight: FontWeight.bold))),
       ),
       body: Column(
         children: [

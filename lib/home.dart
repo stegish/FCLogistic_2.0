@@ -26,8 +26,8 @@ class _HomeState extends State<Home> {
 
   Future<int> getResiFromDay() async {
     try {
-      http.Response response =
-          await http.post(Uri.parse('http://188.12.130.133:1717/MeseReso.php'));
+      http.Response response = await http
+          .post(Uri.parse('http://188.12.130.133:1717/GiornoResi.php'));
       var responseD = jsonDecode(response.body);
       if (responseD['success'] == true) {
         var data = responseD['data'];
@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
   Future<int> getImpegnatiFromMDay() async {
     try {
       http.Response response = await http
-          .post(Uri.parse('http://188.12.130.133:1717/MeseImpegnati.php'));
+          .post(Uri.parse('http://188.12.130.133:1717/GiornoImpegnati.php'));
       var responseD = jsonDecode(response.body);
       if (responseD['success'] == true) {
         var data = responseD['data'];
@@ -248,7 +248,7 @@ class _HomeState extends State<Home> {
                   ),
                   const Text("fino a 4 mesi indietro"),
                   Text(
-                    "${perRimossiAggiunti}",
+                    "entrate - uscite ultimi 30 giorni : ${perRimossiAggiunti}",
                     style: perRimossiAggiunti > 0
                         ? TextStyle(color: Colors.red)
                         : TextStyle(color: Colors.green),

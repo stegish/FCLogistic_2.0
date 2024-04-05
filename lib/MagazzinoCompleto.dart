@@ -169,22 +169,21 @@ class _MagazzinoCompletoState extends State<MagazzinoCompleto> {
                                 height: _list[i].sommaCodici() * 80,
                                 child: ListView.builder(
                                     shrinkWrap: true,
-                                    itemCount: _list[i].sommaCodici(),
+                                    controller: _scrollController,
+                                    itemCount: _list[i].getCodiciC().length,
                                     scrollDirection: Axis.vertical,
                                     itemBuilder: (BuildContext context, int j) {
                                       return Card(
-                                        child: Expanded(
-                                          child: ExpansionTile(
-                                            onExpansionChanged:
-                                                (bool change) {},
-                                            leading: CircleAvatar(
-                                                child: Text(
-                                                    "${_list[i].getnPezziC()[j]}")),
-                                            title: Text(
-                                                "codice: ${_list[i].getCodiciC()[j]}"),
-                                            subtitle: Text(
-                                                "data: ${_list[i].getDateC()[j]}"),
-                                          ),
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                              child: Text(_list[i]
+                                                  .getnPezziC()[j]
+                                                  .toString())),
+                                          title: Text(
+                                              "codice: ${_list[i].getCodiciC()[j]}",
+                                              style: TextStyle(fontSize: 14)),
+                                          subtitle: Text(
+                                              "data: ${_list[i].getDateC()[j]}"),
                                         ),
                                       );
                                     }),
