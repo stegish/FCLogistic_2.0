@@ -168,7 +168,7 @@ class _VTotaleState extends State<VTotale> {
               TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor:
-                      selected == "impegnati" ? Colors.green : null,
+                      selected == "impegnati" ? Colors.white : null,
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -188,7 +188,7 @@ class _VTotaleState extends State<VTotale> {
               ),
               TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: selected == "resi" ? Colors.green : null,
+                  backgroundColor: selected == "resi" ? Colors.white : null,
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(4.0)),

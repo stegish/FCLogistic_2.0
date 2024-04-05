@@ -1,12 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:fcmagazzino/snakBar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'DMag.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:input_quantity/input_quantity.dart';
+
+import 'DMag.dart';
 
 class Impegna extends StatefulWidget {
   final DMag riga;
@@ -63,6 +63,7 @@ class _ImpegnaState extends State<Impegna> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[900],
       key: _ImpegnaS,
       appBar: AppBar(
         title: const Center(
@@ -86,7 +87,7 @@ class _ImpegnaState extends State<Impegna> {
                   minVal: 0,
                   steps: 1,
                   validator: (value) {
-                    if (value == null) {
+                    if (value == null || value == 0) {
                       return "inserisci un valore";
                     } else if (value > rigap.getnPezzi()) {
                       return "stai cercando di togliere troppi pezzi";
@@ -99,13 +100,21 @@ class _ImpegnaState extends State<Impegna> {
                     quantitaI = val;
                   },
                   decoration: const QtyDecorationProps(
-                    borderShape: BorderShapeBtn.circle,
-                    width: 25,
-                    minusBtn: Icon(
-                      Icons.exposure_minus_1,
-                      color: Colors.red,
+                    width: 40,
+                    minusBtn: IconTheme(
+                      data: IconThemeData(size: 50),
+                      child: Icon(
+                        Icons.exposure_minus_1,
+                        color: Colors.red,
+                      ),
                     ),
-                    plusBtn: Icon(Icons.plus_one, color: Colors.green),
+                    plusBtn: IconTheme(
+                      data: IconThemeData(size: 50),
+                      child: Icon(
+                        Icons.plus_one,
+                        color: Colors.green,
+                      ),
+                    ),
                   ),
                 ),
               ),
